@@ -28,7 +28,7 @@
      command: mkdir -p  /var/run/xl2tpd
    - name: create file 
      command: touch /var/run/xl2tpd/l2tp-control
-   - name: run command
+   - name: Run command
      command: '{{ item }}'
      loop: 
          - chmod 600 /etc/ipsec.secrets
@@ -38,19 +38,19 @@
          - ln -s /etc/ipsec.secrets /etc/strongswan/ipsec.secrets
          - chmod 600 /etc/ppp/options.l2tpd.client 
 
-   - name: servces 
+   - name: RestartSservice Strongswan
      service: 
       name: strongswan
       enabled: yes
       state: restarted
      
-   - name: servces 2
+   - name: Restart Service Xl2tpd
      service: 
       name: xl2tpd
       enabled: yes
       state: restarted
     
-   - name: run command2
+   - name: Run command
      command: '{{ item }}'
      loop: 
         - echo "c myvpn" > /var/run/xl2tpd/l2tp-control
