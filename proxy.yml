@@ -1,0 +1,59 @@
+--- 
+- hosts: all
+  gather_facts: False
+  vars: 
+    VPN_SERVER_IP: ''
+    VPN_IPSEC_PSK: ''
+    VPN_USER: ''
+    VPN_PASSWORD: ''
+  tasks: 
+   - name: set proxy
+     yum:
+       name: '{{ item }}'
+       state: present
+     loop: 
+      -  strongswan
+      - xl2tpd
+      - net-tools
+   - name: template file 
+     template: 
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+     loop:
+      - { src: '/home/aesmailzadeh/ansible/ipsec.j2', dest: '/etc/ipsec.conf' }
+      - { src: '/home/aesmailzadeh/ansible/ipsec.secrets.j2', dest: '/etc/ipsec.secrets' }
+      - { src: '/home/aesmailzadeh/ansible/xl2tpd.conf.j2', dest: '/etc/xl2tpd/xl2tpd.conf' }
+      - { src: '/home/aesmailzadeh/ansible/options.l2tpd.client.j2', dest: '/etc/ppp/options.l2tpd.client' }
+   - name: create folder 
+     command: mkdir -p  /var/run/xl2tpd
+   - name: create file 
+     command: touch /var/run/xl2tpd/l2tp-control
+   - name: run command
+     command: '{{ item }}'
+     loop: 
+         - chmod 600 /etc/ipsec.secrets
+         - mv /etc/strongswan/ipsec.conf /etc/strongswan/ipsec.conf.old 
+         - mv /etc/strongswan/ipsec.secrets /etc/strongswan/ipsec.secrets.old 
+         - ln -s /etc/ipsec.conf /etc/strongswan/ipsec.conf 
+         - ln -s /etc/ipsec.secrets /etc/strongswan/ipsec.secrets
+         - chmod 600 /etc/ppp/options.l2tpd.client 
+
+   - name: servces 
+     service: 
+      name: strongswan
+      enabled: yes
+      state: restarted
+     
+   - name: servces 2
+     service: 
+      name: xl2tpd
+      enabled: yes
+      state: restarted
+    
+   - name: run command2
+     command: '{{ item }}'
+     loop: 
+        - echo "c myvpn" > /var/run/xl2tpd/l2tp-control
+        - strongswan up myvpn
+
+

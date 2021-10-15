@@ -1,0 +1,13 @@
+# ipsec.conf - strongSwan IPsec configuration file
+
+conn myvpn
+  auto=add
+  keyexchange=ikev1
+  authby=secret
+  type=transport
+  left=%defaultroute
+  leftprotoport=17/1701
+  rightprotoport=17/1701
+  right={{ VPN_SERVER_IP }}
+  ike=aes128-sha1-modp2048
+  esp=aes128-sha1
