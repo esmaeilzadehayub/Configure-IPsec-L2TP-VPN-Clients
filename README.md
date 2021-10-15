@@ -7,6 +7,7 @@ After setting up your own VPN server, follow these steps to configure Linux VPN 
 To set up the VPN client, first install the following packages:
 
 # Ubuntu and Debian
+``` bash
 apt-get update
 apt-get install strongswan xl2tpd net-tools
 
@@ -79,6 +80,7 @@ password "$VPN_PASSWORD"
 EOF
 
 chmod 600 /etc/ppp/options.l2tpd.client
+```
 The VPN client setup is now complete. Follow the steps below to connect.
 
 Note: You must repeat all steps below every time you try to connect to the VPN.
