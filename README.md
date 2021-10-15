@@ -86,7 +86,7 @@ The VPN client setup is now complete. Follow the steps below to connect.
 Note: You must repeat all steps below every time you try to connect to the VPN.
 
 Create xl2tpd control file:
-
+``` bash
 mkdir -p /var/run/xl2tpd
 touch /var/run/xl2tpd/l2tp-control
 Restart services:
@@ -103,6 +103,7 @@ strongswan up myvpn
 Start the L2TP connection:
 
 echo "c myvpn" > /var/run/xl2tpd/l2tp-control
+```
 Run ifconfig and check the output. You should now see a new interface ppp0.
 
 Check your existing default route:
@@ -130,9 +131,11 @@ route del default dev ppp0
 To disconnect:
 
 # Ubuntu and Debian
+```bash
 echo "d myvpn" > /var/run/xl2tpd/l2tp-control
 ipsec down myvpn
 
 # CentOS and Fedora
 echo "d myvpn" > /var/run/xl2tpd/l2tp-control
 strongswan down myvpn
+```
