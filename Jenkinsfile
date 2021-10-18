@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'worker' }
+    agent any 
     parameters { 
         string( name: 'goood', defaultValue:'hhhhhhhhhh' , description: 'hellososlos') 
         
